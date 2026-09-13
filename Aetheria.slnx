@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Aetheria.AppHost/Aetheria.AppHost.csproj" />
+    <Project Path="src/Aetheria.Operations.Api/Aetheria.Operations.Api.csproj" />
+    <Project Path="src/Aetheria.ServiceDefaults/Aetheria.ServiceDefaults.csproj" />
+    <Project Path="src/Aetheria.WaitTimeSimulator/Aetheria.WaitTimeSimulator.csproj" />
+    <Project Path="src/Aetheria.Web/Aetheria.Web.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,143 @@
+﻿@using Aetheria.Web.Services
+@using Umbraco.Extensions
+
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+
+@inject ParkOperationsClient OperationsClient
+
+@{
+    var operationsId = Model.Value<string>("operationsId");
+
+    var operations = !string.IsNullOrWhiteSpace(operationsId) ? await OperationsClient.GetAttractionAsync(operationsId) : null;
+
+    var tagline = Model.Value<string>("tagline");
+
+    var description = Model.Value<string>("description");
+
+    var minimumHeight = Model.Value<int>("minimumHeight");
+
+    var thrillLevel = Model.Value<string>("thrillLevel");
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
+
+    <title>
+        @Model.Name | Aetheria Adventure Park
+    </title>
+
+    <style>
+            body {
+                font-family: system-ui, sans-serif;
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 40px;
+                background: #111;
+                color: #eee;
+            }
+
+            .brand {
+                opacity: .7;
+                text-transform: uppercase;
+                letter-spacing: .15em;
+            }
+
+            h1 {
+                font-size: 4rem;
+                margin-bottom: .25rem;
+            }
+
+            .tagline {
+                font-size: 1.5rem;
+                opacity: .8;
+            }
+
+            .operations {
+                margin: 32px 0;
+                padding: 24px;
+                border: 1px solid #444;
+                border-radius: 12px;
+            }
+
+            .wait-time {
+                font-size: 2rem;
+                font-weight: bold;
+            }
+
+            dl {
+                display: grid;
+                grid-template-columns: 180px 1fr;
+                gap: 12px;
+                margin-top: 32px;
+            }
+
+            dt {
+                font-weight: bold;
+            }
+
+            dd {
+                margin: 0;
+            }
+    </style>
+</head>
+
+<body>
+
+    <main>
+
+        <div class="brand">
+            Aetheria Adventure Park
+        </div>
+
+        <h1>@Model.Name</h1>
+
+        <p class="tagline">
+            @tagline
+        </p>
+
+        <section class="operations">
+
+            @if (operations is not null)
+            {
+                <div>
+                    @operations.Status
+                </div>
+
+                @if (operations.Status == "Open")
+                {
+                    <div class="wait-time">
+                        @operations.WaitTimeMinutes min
+                    </div>
+                }
+            }
+            else
+            {
+                <strong>
+                    Live operational information unavailable
+                </strong>
+            }
+
+        </section>
+
+        <p>
+            @description
+        </p>
+
+        <dl>
+            <dt>Minimum height</dt>
+            <dd>@minimumHeight cm</dd>
+
+            <dt>Thrill level</dt>
+            <dd>@thrillLevel</dd>
+        </dl>
+
+    </main>
+
+</body>
+</html>
