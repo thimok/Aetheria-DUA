@@ -4,6 +4,10 @@
     <ProjectReference Include="..\Aetheria.ServiceDefaults\Aetheria.ServiceDefaults.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Aetheria.WaitTimeSimulator.Tests" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>

@@ -124,7 +124,7 @@ public sealed class SimulationEngine(
                 IsIndoor: false);
     }
 
-    private static int CalculateTargetWaitTime(AttractionProfile profile, SimulationSnapshot snapshot)
+    internal static int CalculateTargetWaitTime(AttractionProfile profile, SimulationSnapshot snapshot)
     {
         var baseWait = GetBaseWaitTime(snapshot.SimulatedTime);
 
@@ -156,7 +156,7 @@ public sealed class SimulationEngine(
         return RoundToFive(Math.Clamp((int)Math.Round(rawTarget), 5, 120));
     }
 
-    private static int GetBaseWaitTime(TimeOnly time)
+    internal static int GetBaseWaitTime(TimeOnly time)
     {
         var minutes = time.Hour * 60 + time.Minute;
 
@@ -177,7 +177,7 @@ public sealed class SimulationEngine(
         };
     }
 
-    private static int CalculateNextWaitTime(
+    internal static int CalculateNextWaitTime(
         int current,
         int target)
     {
@@ -218,9 +218,9 @@ public sealed class SimulationEngine(
         return RoundToFive(Math.Clamp(result, 5, 120));
     }
 
-    private static int RoundToFive(int value) => (int)Math.Round(value / 5d) * 5;
+    internal static int RoundToFive(int value) => (int)Math.Round(value / 5d) * 5;
 
-    private sealed record AttractionProfile(
+    internal sealed record AttractionProfile(
         double Popularity,
         bool IsIndoor);
 }

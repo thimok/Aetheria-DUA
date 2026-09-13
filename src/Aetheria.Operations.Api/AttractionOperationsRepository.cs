@@ -158,7 +158,7 @@ public sealed class AttractionOperationsRepository(
 
         await SaveAsync(updated);
 
-        logger.LogWarning(
+        logger.LogInformation(
             "Operational status for {AttractionName} changed from {PreviousStatus} to {NewStatus}",
             current.Name,
             current.Status,

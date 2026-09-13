@@ -2,6 +2,9 @@ using Aetheria.Operations.Api;
 using OpenTelemetry.Metrics;
 using Scalar.AspNetCore;
 
+const int MinWaitTimeMinutes = 0;
+const int MaxWaitTimeMinutes = 300;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -81,10 +84,10 @@ attractions.MapGet("/{id}", async (string id, AttractionOperationsRepository ope
 attractions.MapPut("/{id}/wait-time", async (string id, UpdateWaitTimeRequest request, AttractionOperationsRepository operations) =>
     {
         if (request.WaitTimeMinutes
-            is < 0 or > 300)
+            is < MinWaitTimeMinutes or > MaxWaitTimeMinutes)
         {
             return Results.BadRequest(
-                "Wait time must be between 0 and 300 minutes.");
+                $"Wait time must be between {MinWaitTimeMinutes} and {MaxWaitTimeMinutes} minutes.");
         }
 
         var attraction =
@@ -163,9 +166,9 @@ demo.MapPost("/reset",async (AttractionOperationsRepository operations) =>
 
 demo.MapPut("/wait-time", async (SetWaitTimeCommandRequest request, AttractionOperationsRepository operations) =>
     {
-        if (request.WaitTimeMinutes is < 0 or > 300)
+        if (request.WaitTimeMinutes is < MinWaitTimeMinutes or > MaxWaitTimeMinutes)
         {
-            return Results.BadRequest("Wait time must be between 0 and 300 minutes.");
+            return Results.BadRequest($"Wait time must be between {MinWaitTimeMinutes} and {MaxWaitTimeMinutes} minutes.");
         }
 
         var attraction = await operations.UpdateWaitTimeAsync(request.AttractionId, request.WaitTimeMinutes);

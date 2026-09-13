@@ -1,6 +1,116 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Extensions
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
 @{
-	Layout = null;
+    Layout = null;
+
+    var attractions = Umbraco
+        .ContentAtRoot()
+        .DescendantsOrSelf<ContentModels.Attraction>()
+        .OrderBy(attraction => attraction.Name)
+        .ToList();
 }
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
+
+    <title>
+        @Model.ParkName
+    </title>
+
+    <style>
+            body {
+                font-family: system-ui, sans-serif;
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 40px;
+                background: #111;
+                color: #eee;
+            }
+
+            .brand {
+                opacity: .7;
+                text-transform: uppercase;
+                letter-spacing: .15em;
+            }
+
+            h1 {
+                font-size: 4rem;
+                margin-bottom: .25rem;
+            }
+
+            .tagline {
+                font-size: 1.5rem;
+                opacity: .8;
+            }
+
+            .intro {
+                font-size: 1.1rem;
+                line-height: 1.6;
+                margin: 24px 0 40px;
+            }
+
+            .attractions {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: grid;
+                gap: 12px;
+            }
+
+            .attractions a {
+                display: block;
+                padding: 20px 24px;
+                border: 1px solid #444;
+                border-radius: 12px;
+                color: #eee;
+                text-decoration: none;
+                font-size: 1.1rem;
+            }
+
+            .attractions a:hover {
+                border-color: #888;
+            }
+    </style>
+</head>
+
+<body>
+
+    <main>
+
+        <div class="brand">
+            Aetheria Adventure Park
+        </div>
+
+        <h1>@Model.ParkName</h1>
+
+        <p class="tagline">
+            @Model.Tagline
+        </p>
+
+        <p class="intro">
+            @Model.Intro
+        </p>
+
+        <h2>Attractions</h2>
+
+        <ul class="attractions">
+            @foreach (var attraction in attractions)
+            {
+                <li>
+                    <a href="@attraction.Url()">@attraction.Name</a>
+                </li>
+            }
+        </ul>
+
+    </main>
+
+</body>
+</html>
