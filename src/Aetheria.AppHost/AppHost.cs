@@ -86,6 +86,59 @@ var operationsApi = builder
 
                 return Task.CompletedTask;
             }
+        })
+    .WithHttpCommand(
+        path: "/api/demo/latency",
+        displayName: "Set API latency",
+        commandName: "set-latency",
+        commandOptions: new HttpCommandOptions
+        {
+            Method = HttpMethod.Put,
+            Description = "Add artificial latency to the attraction endpoints to demonstrate tracing.",
+            IconName = "Clock",
+            ResultMode = HttpCommandResultMode.Auto,
+            Arguments =
+            [
+                new InteractionInput
+                {
+                    Name = "delay",
+                    Label = "Delay (milliseconds)",
+                    InputType = InputType.Number,
+                    Required = true,
+                    Value = "2000"
+                }
+            ],
+            PrepareRequest = context =>
+            {
+                var delay = context.Arguments.GetInt32("delay");
+
+                context.Request.Content = JsonContent.Create(new
+                {
+                    DelayMilliseconds = delay
+                });
+
+                return Task.CompletedTask;
+            }
+        })
+    .WithHttpCommand(
+        path: "/api/demo/latency",
+        displayName: "Clear API latency",
+        commandName: "clear-latency",
+        commandOptions: new HttpCommandOptions
+        {
+            Method = HttpMethod.Put,
+            Description = "Remove the artificial latency.",
+            IconName = "ArrowReset",
+            ResultMode = HttpCommandResultMode.Auto,
+            PrepareRequest = context =>
+            {
+                context.Request.Content = JsonContent.Create(new
+                {
+                    DelayMilliseconds = 0
+                });
+
+                return Task.CompletedTask;
+            }
         });
 
 var simulator = builder
@@ -186,6 +239,7 @@ builder
     .WithReference(umbracoDatabase).WaitFor(umbracoDatabase)
     .WithReference(operationsApi).WaitFor(operationsApi)
     .WithEnvironment("ConnectionStrings__umbracoDbDSN_ProviderName", "Microsoft.Data.SqlClient")
+    .WithUrlForEndpoint("https", endpoint => new() { Url = "/umbraco", DisplayText = "Umbraco backoffice" })
     .WithHttpHealthCheck("/health");
 
 builder.Build().Run();
